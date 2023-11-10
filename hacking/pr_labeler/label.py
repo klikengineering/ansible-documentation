@@ -260,17 +260,18 @@ def warn_porting_guide_change(ctx: PRLabelerCtx) -> None:
     if user in members:
         return
 
-    matches: list[str] = []
-    for file in ctx.pr.get_files():
+    if matches := [
+        file.filename
+        for file in ctx.pr.get_files()
         if re.fullmatch(
             # Match community porting guides but not core porting guides
             r"docs/docsite/rst/porting_guides/porting_guide_\d.*.rst",
             file.filename,
-        ):
-            matches.append(file.filename)
-    if not matches:
+        )
+    ]:
+        create_boilerplate_comment(ctx, "porting_guide_changes.md", changed_files=matches)
+    else:
         return
-    create_boilerplate_comment(ctx, "porting_guide_changes.md", changed_files=matches)
 
 
 APP = typer.Typer()

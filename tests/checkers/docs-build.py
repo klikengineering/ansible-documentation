@@ -123,15 +123,17 @@ def run_test():
             path = path[len(base_dir):]
 
         if path.startswith('rst/'):
-            path = 'docs/docsite/' + path  # fix up paths reported relative to `docs/docsite/`
+            path = f'docs/docsite/{path}'
 
         if level == 'warning':
-            code = 'warning'
-
-            for label, pattern in known_warnings.items():
-                if re.search(pattern, message):
-                    code = label
-                    break
+            code = next(
+                (
+                    label
+                    for label, pattern in known_warnings.items()
+                    if re.search(pattern, message)
+                ),
+                'warning',
+            )
         else:
             code = 'error'
 

@@ -50,10 +50,7 @@ def process_refs(topdir: str | os.PathLike[str], plugin_names: Collection[str]):
                 for ref_match in re.finditer(REF_RE, data):
                     label = ref_match.group(1)
 
-                    # If the ref label includes "<", then search for the label
-                    # inside of the "<>"
-                    label_match = re.search(LABEL_RE, label)
-                    if label_match:
+                    if label_match := re.search(LABEL_RE, label):
                         label = label_match.group(1)
 
                     # If the ref label is listed in plugins, then print that

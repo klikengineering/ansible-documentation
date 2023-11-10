@@ -9,6 +9,7 @@ and the current ansible_facts regarding the distribution version.
 This assumes a working ansible version in the path.
 """
 
+
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
@@ -70,7 +71,7 @@ parsed = json.loads(ansible_out[ansible_out.index('{'):])
 ansible_facts = {}
 for fact in facts:
     try:
-        ansible_facts[fact] = parsed['ansible_facts']['ansible_' + fact]
+        ansible_facts[fact] = parsed['ansible_facts'][f'ansible_{fact}']
     except Exception:
         ansible_facts[fact] = "N/A"
 
@@ -96,8 +97,7 @@ system = platform.system()
 if system != 'Linux':
     output['platform.system'] = system
 
-release = platform.release()
-if release:
+if release := platform.release():
     output['platform.release'] = release
 
 print(json.dumps(output, indent=4))
