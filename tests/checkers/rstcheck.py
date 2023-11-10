@@ -38,7 +38,7 @@ def main():
     results = parse_to_list_of_dict(pattern, process.stderr.decode(encoding))
 
     for result in results:
-        print('%s:%s:%s: %s' % (result['path'], result['line'], 0, result['message']))
+        print(f"{result['path']}:{result['line']}:0: {result['message']}")
 
 
 def parse_to_list_of_dict(pattern, value):
@@ -46,9 +46,7 @@ def parse_to_list_of_dict(pattern, value):
     unmatched = []
 
     for line in value.splitlines():
-        match = re.search(pattern, line)
-
-        if match:
+        if match := re.search(pattern, line):
             matched.append(match.groupdict())
         else:
             unmatched.append(line)
